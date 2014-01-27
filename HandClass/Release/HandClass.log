@@ -1,0 +1,33 @@
+﻿Build started 1/5/2014 1:10:26 PM.
+     1>Project "C:\Users\Eric Walton\Dropbox\Programming\C++\PokerOdds-v3\HandClass\HandClass.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\HandClass.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+     1>main.cpp(4): warning C4005: 'NDEBUG' : macro redefinition
+                 command-line arguments :  see previous definition of 'NDEBUG'
+     1>c:\users\eric walton\dropbox\programming\c++\pokerodds-v3\handclass\../headers/hands_cards.h(162): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\eric walton\dropbox\programming\c++\pokerodds-v3\handclass\../headers/odds_byCount.h(64): warning C4244: 'initializing' : conversion from 'unsigned short' to 'unsigned char', possible loss of data
+     1>c:\users\eric walton\dropbox\programming\c++\pokerodds-v3\handclass\../headers/odds_byCount.h(85): warning C4244: 'initializing' : conversion from 'unsigned short' to 'unsigned char', possible loss of data
+     1>c:\users\eric walton\dropbox\programming\c++\pokerodds-v3\handclass\../headers/odds_byCount.h(106): warning C4244: 'initializing' : conversion from 'unsigned short' to 'unsigned char', possible loss of data
+     1>c:\users\eric walton\dropbox\programming\c++\pokerodds-v3\handclass\../headers/odds_byCount.h(127): warning C4244: 'initializing' : conversion from 'unsigned short' to 'unsigned char', possible loss of data
+     1>c:\users\eric walton\dropbox\programming\c++\pokerodds-v3\handclass\../headers/odds_byCount.h(259): warning C4244: 'initializing' : conversion from 'unsigned __int64' to 'unsigned short', possible loss of data
+     1>main.cpp(80): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+     1>main.cpp(121): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(75): warning C4101: 'handMasks' : unreferenced local variable
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Eric Walton\Dropbox\Programming\C++\PokerOdds-v3\Release\HandClass.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\HandClass.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Eric Walton\Dropbox\Programming\C++\PokerOdds-v3\Release\HandClass.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Eric Walton\Dropbox\Programming\C++\PokerOdds-v3\Release\HandClass.lib" /MACHINE:X86 Release\main.obj
+         Generating code
+         Finished generating code
+         HandClass.vcxproj -> C:\Users\Eric Walton\Dropbox\Programming\C++\PokerOdds-v3\Release\HandClass.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Eric Walton\Dropbox\Programming\C++\PokerOdds-v3\Release\HandClass.exe;#1" /manifest Release\HandClass.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\HandClass.unsuccessfulbuild".
+         Touching "Release\HandClass.lastbuildstate".
+     1>Done Building Project "C:\Users\Eric Walton\Dropbox\Programming\C++\PokerOdds-v3\HandClass\HandClass.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.99

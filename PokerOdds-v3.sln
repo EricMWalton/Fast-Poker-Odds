@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PokerOdds-v3", "PokerOdds-v3\PokerOdds-v3.vcxproj", "{E22A581D-B13F-45FA-940B-D0A37AAD7D2E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Enumerate", "Enumerate\Enumerate.vcxproj", "{6CDE78B2-CC71-4556-A4BF-C72E793F9968}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Evaluate", "Evaluate\Evaluate.vcxproj", "{E76AC92C-9086-4AA3-B2CB-AC94AE81CCC6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HandClass", "HandClass\HandClass.vcxproj", "{B3F36A36-D276-4FE9-8460-9B346F00B6E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E22A581D-B13F-45FA-940B-D0A37AAD7D2E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E22A581D-B13F-45FA-940B-D0A37AAD7D2E}.Debug|Win32.Build.0 = Debug|Win32
+		{E22A581D-B13F-45FA-940B-D0A37AAD7D2E}.Release|Win32.ActiveCfg = Release|Win32
+		{E22A581D-B13F-45FA-940B-D0A37AAD7D2E}.Release|Win32.Build.0 = Release|Win32
+		{6CDE78B2-CC71-4556-A4BF-C72E793F9968}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6CDE78B2-CC71-4556-A4BF-C72E793F9968}.Debug|Win32.Build.0 = Debug|Win32
+		{6CDE78B2-CC71-4556-A4BF-C72E793F9968}.Release|Win32.ActiveCfg = Release|Win32
+		{6CDE78B2-CC71-4556-A4BF-C72E793F9968}.Release|Win32.Build.0 = Release|Win32
+		{E76AC92C-9086-4AA3-B2CB-AC94AE81CCC6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E76AC92C-9086-4AA3-B2CB-AC94AE81CCC6}.Debug|Win32.Build.0 = Debug|Win32
+		{E76AC92C-9086-4AA3-B2CB-AC94AE81CCC6}.Release|Win32.ActiveCfg = Release|Win32
+		{E76AC92C-9086-4AA3-B2CB-AC94AE81CCC6}.Release|Win32.Build.0 = Release|Win32
+		{B3F36A36-D276-4FE9-8460-9B346F00B6E3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B3F36A36-D276-4FE9-8460-9B346F00B6E3}.Debug|Win32.Build.0 = Debug|Win32
+		{B3F36A36-D276-4FE9-8460-9B346F00B6E3}.Release|Win32.ActiveCfg = Release|Win32
+		{B3F36A36-D276-4FE9-8460-9B346F00B6E3}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
