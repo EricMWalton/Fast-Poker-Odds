@@ -11,3 +11,9 @@
 *.lai
 *.la
 *.a
+
+# debug and release builds
+*/Debug
+*/Release
+Debug
+Release

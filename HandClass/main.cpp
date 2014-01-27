@@ -3,9 +3,9 @@
 
 #include "../headers/std_headers.h"
 
-#include "../headers/my_string.h"
-#include "../headers/basic_helpers.h"
-#include "../headers/string_number.h"
+#include "../headers/helpers/my_string.h"
+#include "../headers/helpers/basic_helpers.h"
+#include "../headers/helpers/string_number.h"
 #include "../headers/lookup/l_handMasks.h"
 #include "../headers/lookup/l_handPerms.h"
 
@@ -63,7 +63,6 @@ void printOutcomes(unsigned int * handInds, unsigned int aWins, unsigned int bWi
 int main()
 	{
 	DECK_MASK boardCards[5];
-	DECK_MASK handMasks[2];
 	unsigned int handInds[2];
 
 	const unsigned int trials = 1;
@@ -108,10 +107,8 @@ int main()
 
 		clock_t start = clock();
 
-		//for(int i = 0; i < l_handPerms[handInds[1]]; i++)
 		for(int i = 0; i < totalPerms; i++)
 			{
-			//handMasks[1] = l_handMasks[handInds[1]][i];
 
 			if ((fixedHand & movingHand[i]) != 0)
 				// cards in common? impossible suits

@@ -2,7 +2,7 @@
 // ENUMERATES ALL POSSIBLE BOARDS, GIVEN A SET OF CARDS ALREADY IN PLAY
 // the version using yield() is significantly faster
 
-#include <yield.h>
+#include "../headers/helpers/yield.h"
 
 #ifndef HANDS_CARDS
 #include "hands_cards.h"

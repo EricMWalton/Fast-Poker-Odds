@@ -1,0 +1,320 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Constantia;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sl240\slmult1\lang9\b\f0\fs32 Intro\b0\fs22\par
+\par
+Some new ideas I've had make most of the earlier scratchpad obsolete.  So a new document...\par
+\par
+What pair type hand is this??  One pair, two pair, three of a kind, full house, 4oak?\par
+\par
+To review, we represent the 7-card hand as a bitfield, 1 meaning a card is included, 0 not.  The bits in the bitfield are arranged like:\par
+\tab As Ks ... 2s Ad Kd ... 2d Ah Kh ... 2h Ac Kc ... 2c\par
+\par
+Further, we split this bitfield into 4 13-bit fields, one for each suit.\par
+\tab let S,D, H, C be those bitfields\par
+\par
+\par
+\b\fs32 Bit counting\b0\fs22\par
+\par
+Don't know how fast bit counting is...but the sleekest approach in this vein is:\par
+\par
+XOR all 4 suits.  Count the bits\par
+OR all 4 suits.  Count the bits\par
+\par
+\ul Hand type\tab\tab Note\tab\tab # of OR bits\tab # of XOR bits\tab\par
+\ulnone No pair\tab\tab --\tab\tab\tab 7\tab\tab 7\par
+One pair\tab\tab --\tab\tab\tab 6\tab\tab 5\par
+Two pair\tab\tab --\tab\tab\tab 5\tab\tab 3\par
+"\tab\tab\tab + 3rd pair\tab\tab 4\tab\tab 1\par
+Three of a kind\tab --\tab\tab\tab 5\tab\tab 5\par
+Full house\tab\tab --\tab\tab\tab 4\tab\tab 3\par
+"\tab\tab\tab + pair\tab\tab\tab 3\tab\tab 1\tab\par
+"\tab\tab\tab + 3oak\tab\tab\tab 3\tab\tab 3\par
+4 of a kind\tab\tab --\tab\tab\tab 4\tab\tab 3\par
+"\tab\tab\tab + pair\tab\tab\tab 3\tab\tab 1\par
+"\tab\tab\tab + 3oak\tab\tab\tab 2\tab\tab 1\par
+\par
+\par
+Those two numbers differentiate everything except some of the 4oak / full house decisions.  To decide that, simply AND all 4 suits.  If the result is nonzero, its 4 of a kind.\par
+\par
+\par
+\b\fs32 Working backwards - method\b0\fs22\par
+\par
+Singleton cards do not change our pair-type.  Therefore, we only need to know, for each rank, whether there are:\par
+\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1 0 or 1 of that rank\par
+{\pntext\f0 2.\tab}2 of that rank\par
+{\pntext\f0 3.\tab}3 of that rank\par
+{\pntext\f0 4.\tab}4 of that rank.\par
+\pard\sl240\slmult1\par
+Ideally, we'd use operators to create two 13-bit bitfields that encode this information.  For this to work, we'd need each bitfield to separate the ranks by these classes, each bitfield having 1 for two of the classes, 0 for the other two.  As long as the bitfields separate the classes differently, this will suffice.\par
+\par
+\b\fs24 but I'm halfway there...\b0\fs22\par
+\par
+~(S ^ C ^ D ^ H) & (S | C | D | H) \par
+\par
+has 1s wherever there are 2 or 4 of that rank.  We have separated each rank into classes #2 and #4, or classes #1 and #3.  \par
+\par
+The second bitfield needs to either split #1 + #2 vs. #3 and #4, or #1 + #4 vs. #2 + #3.  \par
+\par
+\b\fs24 How to generate the second bitfield?\par
+\b0\fs22\tab exploring various options.\par
+\par
+\par
+\ul Building pieces\par
+\par
+\ulnone S | C | D | H \par
+\tab has 1s where there are 1+ of that rank.\par
+\par
+S ^ C ^ D ^ H\par
+\tab has 1s where there are 1 or 3 of that rank.\par
+\par
+\par
+\par
+(S & C) | (D & H)\par
+\tab has 1s where there are 3, 4, and possibly (depending on the suits of the split) 2 of that rank.\par
+\par
+(S & C) ^ (D & H)\par
+\tab has 1s where there are 3 and possibly (dependong on the split) 2 of that rank.\par
+\par
+[(S & C) ^ (D & H)] & (S ^ C ^ D ^ H)\par
+\tab yields a bitfield with 1s where there are 3 of that rank.\par
+\par
+~(S ^ C ^ D ^ H) & (S | C | D | H) & ~(S & C & D & H)\par
+\tab yields a bitfield with 1s where there are 2 of that rank.\par
+\par
+ORing above two would get what we want, but I wonder if there's a way to simplify?\par
+\par
+However, we've already calculated many of the pieces:\par
+\tab (S ^ C ^ D ^ H) and (S | C | D | H) are in local memory already.\par
+\tab\par
+\par
+Let O = S | C | D | H\par
+\tab for " at least \ul o\ulnone ne"\par
+Let E = S ^ C ^ D ^ H\par
+\tab for "is \ul e\ulnone ven"\par
+Let F = S & C & D & H\par
+\tab for "four of a kind"\par
+Let X = (S & C) ^ (D & H)\par
+\par
+To separate the classes, compute:\par
+\tab (X & E) | (~E & O & ~F)\par
+\par
+= [X | (~E & O & ~F)] & [(E | (~E & O & ~F)]\par
+= [(X | ~E) & (X | O) & (X | ~F)] & [(E | ~E) & (E | O) & (E | ~F)]\par
+= (X | ~E) & (X | O) & (X | ~F) &  (E | O) & (E | ~F)\par
+\par
+\par
+\par
+not much help.  But it seems to me I'll already have calculated many of the operands in the first version.\par
+\par
+\b\fs24 Bitwise math\b0\fs22\par
+\par
+First off... x ^ y means ~x <-> y\par
+\par
+so...\par
+\par
+S ^ C \par
+= ~S <-> C\par
+= (S & ~C) | (~S & C)\par
+\par
+S ^ C ^ D\par
+= D ^ (S ^ C)\par
+= ~D <-> [(S & ~C) | (~S & C)]\par
+= [(~D & [(S & ~C) | (~S & C)]] | [D & [~(S & ~C) & ~(~S & C)]\par
+= [(~D & S & ~C) | (~D & ~S & C)] | [(D & (~S | C) & D & (S | ~C)]\par
+= [(~D & S & ~C) | (~D & ~S & C)] | [[(D & ~S) | (D &  C)] & (S | ~C)]\par
+= [(~D & S & ~C) | (~D & ~S & C)] | [[(D & ~S) | (D &  C)] & (S | ~C)]\par
+...ugh this is becoming a series of ands for every combination of suits that has an even number of yeses.  \par
+\par
+\par
+\b\fs24 Issue\par
+\par
+\b0\fs22 Even if we have the two bitfields as described above, we still would need to count bits.  For instance suppose we AND the two bitfields, and get nonzero.  That means there's at least one pair.  But how many?  Now we need to count bits.  \par
+\par
+\b\fs32 Combination\b0\fs22\par
+\par
+Could do this...have a lookup table for straight that returns 0 if it's a str8, otherwise returns the number of bits.\par
+\par
+Testing the "halfway there" bitfield above for eqaulity with zero, plus the number of bits, would be most the info we'd need.\par
+\par
+Hand type\tab\tab # of OR bits\tab\tab 2 or 4 of a rank somewhere?\par
+No pair\tab\tab 7\tab\tab\tab no\par
+One pair\tab\tab 6\tab\tab\tab yes\par
+Two pair\tab\tab 5\tab\tab\tab yes\par
+  + 3rd pair\tab\tab 4\tab\tab\tab yes\par
+3 of a kind\tab\tab 5\tab\tab\tab no\par
+Full house\tab\tab 4\tab\tab\tab yes\par
+  + pair\tab\tab\tab 3\tab\tab\tab yes\par
+  + trips\tab\tab 3\tab\tab\tab no\par
+4 of a kind\tab\tab 4\tab\tab\tab yes\par
+  + pair\tab\tab\tab 3\tab\tab\tab yes\par
+  + 3oak\tab\tab 2\tab\tab\tab yes\par
+\par
+still not enough.  4 - yes is 2 pair or full house.\par
+\par
+\par
+\par
+\b\fs32 How to find ranks\b0\fs22\par
+\par
+This may be relevant to above, if results here are needed there as well.\par
+\par
+\b\fs24 Hand strength representation\b0\fs22\par
+\par
+From left to right:\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1 4 bits: hand strength (0 - 8)\par
+{\pntext\f0 2.\tab}13 bits: primary ranks \par
+{\pntext\f0 3.\tab}13 bits: secondary ranks\par
+\pard\sl240\slmult1\par
+\par
+\b\fs24 Big problem\par
+\par
+\b0\fs22 We need to strip 1s from the right side of #2 or #3.  For instance, a no pair hand is only allowed to compare 5 cards.  Is there a quick way to drop the x rightmost bits?  Assuming we have a way to drop bits, the following categories are fairly simple:\par
+\par
+Idea:  Maybe after comparisan do a subtraction and see if the result falls within a range?  \par
+\par
+\b\fs24 No pair\par
+\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1\b0\fs22 4 bits = 0000\par
+{\pntext\f0 2.\tab}13 bits =  (S | D | C | H)\par
+\pard\sl240\slmult1\par
+\b\fs24 1 pair\b0\fs22\par
+\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1 4 bits = 0001\par
+{\pntext\f0 2.\tab}13 bits = (S | D | C | H) & ~(S ^ D ^ C ^ H)\par
+\pard\sl240\slmult1\par
+\b\fs24 2 pair\b0\fs22\par
+\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1 4 bits = 0010\par
+{\pntext\f0 2.\tab}13 bits = (S | D | C | H) & ~(S ^ D ^ C ^ H)*\par
+{\pntext\f0 3.\tab}13 bits = S ^ D ^ C ^ H\par
+\pard\sl240\slmult1\par
+* Have to exclude the 3rd pair from #2, and include it as a "kicker" in #3.  \par
+\par
+\b\fs24 3 of a kind\b0\fs22\par
+\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1 4 bits = 0011\par
+{\pntext\f0 2.\tab}13 bits = [(S & C) ^ (D & H)] & (S ^ C ^ D ^ H)\par
+{\pntext\f0 3.\tab}13 bits = (S | C | D | H) & ~above\par
+\pard\sl240\slmult1\par
+\b\fs24 Full house\b0\fs22\par
+\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1 4 bits = 0110\par
+{\pntext\f0 2.\tab}13 bits = [(S & C) ^ (D & H)] & (S ^ C ^ D ^ H)\par
+{\pntext\f0 3.\tab}13 bits = ~(S ^ C ^ D ^ H)*\par
+\pard\sl240\slmult1\par
+* Have to handle hands with 2 threes of a kind...or an extra pair.\par
+\par
+\b\fs24 Four of a kind\b0\fs22\par
+\par
+\pard{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\fi-360\li360\sl240\slmult1 4 bits = 0111\par
+{\pntext\f0 2.\tab}13 bits = S & C & D & H\par
+{\pntext\f0 3.\tab}13 bits = (S | C | D | H) & ~above\par
+\pard\sl240\slmult1\par
+\par
+\b\fs32 Leaving trailing bits\b0\fs22\par
+\par
+Necessary in many cases...every hand is only 5 cards so only compare so many.  3 pairs should disregard the 3rd pair. These are the cases I can think of:\par
+\par
+No pair:\par
+\tab compare only 5 cards\par
+One pair:\par
+\tab compare only 3 kickers.\par
+Two pair:\par
+\tab ignore 3rd pair; compare only 1 kicker\par
+Three of a kind:\par
+\tab compare only 2 kickers.\par
+Flush\line\tab compare only 5 cards.\par
+Full house\par
+\tab ignore 2nd pairs and put 2nd trips in the pair bitset.  \par
+\par
+\par
+\b\fs32 Arcane bit math...\par
+\par
+\b0\fs22 via {\field{\*\fldinst{HYPERLINK "http://graphics.stanford.edu/~seander/bithacks.html#SelectPosFromMSBRank"}}{\fldrslt{\ul\cf1 http://graphics.stanford.edu/~seander/bithacks.html#SelectPosFromMSBRank}}}\f0\fs18\par
+\fs22\par
+They have a huge heap of bitwise operators for finding the bit position of the t-th set bit.  They do this with 64-bit integers, coutning from the left.  If I know t in advance, and I'm working with 13 bits instead, maybe I can simplify this math.\par
+\par
+v is the input number.\par
+r is the bit's desired rank.\par
+s is the output.\par
+t is the bit count (temporary)\par
+0UL is all 0s.\par
+\tab noul = ~0UL\par
+\par
+\par
+a =  v - ((v >> 1) & noul/3);\par
+b = (a & noul/5) + ((a >> 2) & noul/5)\par
+c = (b + (b >> 4)) & noul/0x11;\par
+d = (c + (c >> 8)) & noul/0x101;\par
+t = (d >> 32) + (d >> 48);\par
+\par
+  // Now do branchless select!    \par
+                                            \par
+s  = 64;\par
+if (r > t) \{s -= 32; r -= t;\}\par
+\par
+t  = (d >> (s - 16)) & 0xff;\par
+if (r > t) \{s -= 16; r -= t;\}\par
+\par
+t  = (c >> (s - 8)) & 0xf;\par
+if (r > t) \{s -= 8; r -= t;\}\par
+\par
+t  = (b >> (s - 4)) & 0x7;\par
+if (r > t) \{s -= 4; r -= t;\}\par
+\par
+t  = (a >> (s - 2)) & 0x3;\par
+if (r > t) \{s -= 2; r -= t;\}\par
+\par
+t  = (v >> (s - 1)) & 0x1;\par
+if (r > t) s--;\par
+s = 65 - s\par
+\par
+Could probably eliminate 2 steps in each stage, since my integer is 13 bits, not 64.\par
+\par
+\ul UPDATE\ulnone :  Did eliminate a few steps, but it's still some 30-odd lines of code.  Implementig the lookup table now.  \par
+\par
+\b\fs32 Lookup table\b0\fs22\par
+\par
+Could try to do a full 14-bit lookup...or do a recursive 7-bit one....how woujld that work?\par
+\par
+Say you have 0110-1001 and you're using two 4-bit tables.\par
+\par
+Suppose you want to drop the two rightmost bits.  Plug the right nibble into the lookup, it returns 0000.  What does that mean?  It means replace the right nibble with that.  \par
+If you wanted to replace only one bit you'd use a different lookup table (or a 2-d lookup), and you'd get 1000.  But what if you wanted to eliminate 3 bits?  Or 4?  Suppose the table signals this by returning 1111, which would never make sense for dropping bits.  That tells you there aren't enough bits here to do everything you need.  So count the bits in the right nibble, subtract it from the amount we want to eliminate, and plug the left nibble into the lookup.\par
+\par
+i count 9 operations if recursive step is needed, 5 otherwise.\par
+\par
+\par
+let m, c be amount in millions we trade for of metal, crystal.\par
+\par
+1 deut -> 2.5 metal\par
+1 deut -> 1.5 crystal\par
+\par
+(1/2.5)m + (1 / 1.5)c = 110\par
+2m/5 + 2c/3 = 110\par
+6m + 10c = 1650\par
+\par
+Want to get 2.5 : 1 crystal metal ratio\par
+\par
+(m + 101) = 2.5 * (8.2 + c)\par
+m + 101 = 20.5 + 2.5c\par
+m - 2.5c = -80.5\line\par
+solution: \par
+\par
+132.8 metal, 85.32 crystal\par
+\par
+\par
+\par
+\par
+\par
+\par
+}
+ 

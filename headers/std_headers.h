@@ -4,13 +4,13 @@
 
 #include <assert.h>
 #include <iostream>
-#include "../headers/consoleHelpers.h"
+#include "../headers/helpers/consoleHelpers.h"
 
 #include <bitset>
-#include "../headers/array_helpers.h"
-#include "../headers/bit_helpers.h"
+#include "../headers/helpers/array_helpers.h"
+#include "../headers/helpers/bit_helpers.h"
 #include "../headers/hands_cards.h"
 #include "../headers/odds_byCount.h"
 #include "../headers/enumerate.h"
-#include "../headers/my_math.h"
+#include "../headers/helpers/my_math.h"
 #include <vector>
