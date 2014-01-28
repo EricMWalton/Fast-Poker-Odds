@@ -1,8 +1,7 @@
 Fast-Poker-Odds
 ===============
 
-Texas Hold'Em odds calculator.  It evaluates roughly 23 million hands per second on my 2.67 Ghz laptop.  This is competitive with the few versions I've heard about.
-
+Texas Hold'Em odds calculator.  It evaluates roughly 23 million hands per second on my 2.67 Ghz laptop.  This is right in the ballpark of the fastest versions I've heard about.  
 
 Executables
 -----------
