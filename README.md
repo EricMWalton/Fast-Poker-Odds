@@ -8,19 +8,21 @@ Executables
 
 Each of these executables tests (and demonstrates) a different aspect of the program.
 
-HandStrength/main.cpp: Tests the fcns that evaluate the hand strength of a seven-card hand (straight, pair, etc.)  
-Enumerate/main.cpp: Enumerates all possible boards, given the cards that are in play.  
-Evalute/main.cpp: Given two starting hands, computes win probability by enumerating all possible boards.
-HandClass/main.cpp: Given two starting hand classes (i.e. Ace-King suited), evalutes win probabilities by tallying results from all suit combinations and all boards.
+**HandStrength/main.cpp**: Tests the fcns that evaluate the hand strength of a seven-card hand (straight, pair, etc.)  
+
+**Enumerate/main.cpp**: Enumerates all possible boards, given the cards that are in play.  
+
+**Evalute/main.cpp**: Given two starting hands, computes win probability by enumerating all possible boards.
+
+**HandClass/main.cpp**: Given two starting hand classes (i.e. Ace-King suited), evalutes win probabilities by tallying results from all suit combinations and all boards.
 
 Further Development
 -------------------
 
 Very easily, this program could be extended for more than two players, for starting from any stage of the hand, and for any possible "dead" cards.  
 
-Adapting for games other than Texas Hold'Em would be a little harder, but doable.
+Adapting for games other than Texas Hold'Em would involve reinventing a few of the core functions, but would be doable.
 
-End goal: fill a mySQL database with the percentages for every 2 and 3 way handclass combination. 
 
 Acknowledgements
 ----------------
