@@ -21,7 +21,7 @@ Further Development
 
 Very easily, this program could be extended for more than two players, for starting from any stage of the hand, and for any possible "dead" cards.  
 
-Adapting for games other than Texas Hold'Em would involve reinventing a few of the core functions, but would be doable.
+There is a huge area for improvement in speed.  As of now, each set of 7 card ranks is checked 16,384 times for pairs --- one for each suit permutation.  By iterating through the boards by rank and then by suit, rather than the reverse, it is possible to avoid that redundancy.
 
 
 Acknowledgements
